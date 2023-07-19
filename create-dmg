@@ -34,6 +34,7 @@ SKIP_JENKINS=0
 MAXIMUM_UNMOUNTING_ATTEMPTS=3
 SIGNATURE=""
 NOTARIZE=""
+INSTALLDEST="/Applications"
 
 function pure_version() {
 	echo "$CDMG_VERSION"
@@ -92,6 +93,8 @@ Options:
       set position of the file's icon
   --hide-extension <file_name>
       hide the extension of file
+  --install-destination <folder>
+	  set the installation destination (default is /Applications)
   --app-drop-link <x> <y>
       make a drop link to Applications, at location x,y
   --ql-drop-link <x> <y>
@@ -176,6 +179,9 @@ while [[ "${1:0:1}" = "-" ]]; do
 			QL_CLAUSE="set position of item \"QuickLook\" to {$2, $3}
 			"
 			shift; shift; shift;;
+		--install-destination)
+			INSTALLDEST=$2
+			shift; shift;;
 		--app-drop-link)
 			APPLICATION_LINK=$2
 			APPLICATION_CLAUSE="set position of item \"Applications\" to {$2, $3}
@@ -402,9 +408,12 @@ if [[ -n "$BACKGROUND_FILE" ]]; then
 fi
 
 if [[ -n "$APPLICATION_LINK" ]]; then
-	echo "Making link to Applications dir..."
+	echo "Making link to $INSTALLDEST dir..."
 	echo $MOUNT_DIR
-	ln -s /Applications "$MOUNT_DIR/Applications"
+	# Replace slashes with dashes, and remove leading dash
+	LINK_NAME=$(echo "$INSTALLDEST" | sed 's/\//-/g; s/^-//')
+	ln -s "$INSTALLDEST" "$MOUNT_DIR/$LINK_NAME"
+	APPLICATION_CLAUSE="${APPLICATION_CLAUSE/Applications/$LINK_NAME}"
 fi
 
 if [[ -n "$QL_LINK" ]]; then
