@@ -57,7 +57,6 @@ All contents of source\_folder will be copied into the disk image.
 - **--icon-size \<icon_size\>:** set window icons size (up to 128)
 - **--icon \<file_name\> \<x\> \<y\>:** set position of the file's icon
 - **--hide-extension \<file_name\>:** hide the extension of file
-- **--custom-icon \<file_name|custom_icon|sample_file\> \<x\> \<y\>:** set position and -tom icon
 - **--app-drop-link \<x\> \<y\>:** make a drop link to Applications, at location x, y
 - **--ql-drop-link \<x\> \<y\>:** make a drop link to /Library/QuickLook, at location x, y
 - **--eula \<eula_file\>:** attach a license file to the dmg
@@ -65,6 +64,8 @@ All contents of source\_folder will be copied into the disk image.
 - **--no-internet-enable:** disable automatic mount&copy
 - **--format:** specify the final image format (UDZO|UDBZ|ULFO|ULMO) (default is UDZO)
 - **--filesystem:** specify the image filesystem (HFS+|APFS) (default is HFS+, APFS supports macOS 10.13 or newer)
+- **--encrypt:** enable encryption for the resulting disk image (AES-256 - you will be prompted for password)
+- **--encrypt-aes128:** enable encryption for the resulting disk image (AES-128 - you will be prompted for password)
 - **--add-file \<target_name\> \<file|folder\> \<x\> \<y\>:** add additional file or folder (can be used multiple times)
 - **--disk-image-size \<x\>:** set the disk image size manually to x MB
 - **--hdiutil-verbose:** execute hdiutil in verbose mode
@@ -77,6 +78,10 @@ All contents of source\_folder will be copied into the disk image.
 - **--sandbox-safe:** hdiutil with sandbox compatibility, do not bless and do not execute the cosmetic AppleScript (not supported for APFS disk images)
 - **--version:** show tool version number
 - **-h, --help:** display the help
+
+Encryption
+-------
+hdiutil supports native disk image encryption using AES-256 (slower but stronger) or AES-128 (faster but weaker).  Enabling disk image encryption via create-dmg will require the entry of the password during the middle (compression phase) of the process.  Take care to enter the password correctly, because hdiutil will not prompt a second time to confirm the password.
 
 Example
 -------
@@ -111,7 +116,7 @@ We'd like to keep it working in as many versions as possible, but unfortunately,
 
 But if you find a bug in an older version, go ahead and report it! We'll try to work with you to get it fixed.
 
-If you're running OS X 10.5 or later, you're SOL. That's just too hard to deal with in 2020. ;)
+If you're running OS X 10.5 or earlier, you're SOL. That's just too hard to deal with in 2023. ;)
 
 Alternatives
 ------------
